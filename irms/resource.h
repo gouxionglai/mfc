@@ -8,8 +8,8 @@
 #define IDS_ABOUTBOX                    101
 #define IDD_IRMS_DIALOG                 102
 #define IDR_MAINFRAME                   128
-#define IDB_BITMAP1                     131
 #define IDR_MENU1                       133
+#define IDB_BITMAP1                     135
 #define IDC_BACKGROUND                  1000
 #define IDC_INFO                        1002
 #define ID_32771                        32771
@@ -20,7 +20,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        135
+#define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32774
 #define _APS_NEXT_CONTROL_VALUE         1005
 #define _APS_NEXT_SYMED_VALUE           101

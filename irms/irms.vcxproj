@@ -212,7 +212,7 @@
     <None Include="res\irms.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\background.bmp" />
+    <Image Include="res\backgroud.bmp" />
     <Image Include="res\irms.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

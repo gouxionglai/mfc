@@ -74,9 +74,3 @@ LRESULT CSplashDlg::OnProcName(WPARAM wParam, LPARAM lParam)
 	return 0;
 
 }
-
-typedef struct {
-	CString srcString;
-	CString DesString;
-	CWnd* hander;
-}Param;

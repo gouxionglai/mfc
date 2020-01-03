@@ -17,48 +17,6 @@ CSplashThread::~CSplashThread()
 {
 }
 
-CString ExecuteCmd2(CString cmdline, CString dir)
-{
-	SECURITY_ATTRIBUTES sa;
-	HANDLE hRead, hWrite;
-
-	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
-	sa.lpSecurityDescriptor = NULL;
-	sa.bInheritHandle = TRUE;
-	if (!CreatePipe(&hRead, &hWrite, &sa, 0))
-	{
-		return NULL;
-	}
-	STARTUPINFO si = { sizeof(si) };
-	PROCESS_INFORMATION pi;
-	si.hStdError = hWrite;
-	si.hStdOutput = hWrite;
-	si.wShowWindow = SW_HIDE;
-	si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
-
-	/*TCHAR szCmd[] = _T("\"c:\\program files\\internet explorer\\iexplore.exe\" http://community.csdn.net/");*/
-	//LPTSTR cmdArgs = _T("cmd /c netstat -ano | findstr 0.0.0.0:8008");
-	if (!CreateProcess(NULL, (LPTSTR)(LPCTSTR)cmdline, NULL, NULL, TRUE, NULL, NULL, dir, &si, &pi))
-	{
-		return NULL;
-	}
-	CloseHandle(hWrite);
-
-	char buffer[4096];
-	memset(buffer, 0, 4096);
-	CString output;
-	DWORD byteRead;
-	while (true)
-	{
-		if (ReadFile(hRead, buffer, 4095, &byteRead, NULL) == NULL)
-		{
-			break;
-		}
-		output += buffer;
-	}
-	return output;
-}
-
 
 BOOL CSplashThread::InitInstance()
 {
@@ -70,7 +28,6 @@ BOOL CSplashThread::InitInstance()
     //m_pSplashDlg->SetEnable(true);
     m_pSplashDlg->Create(IDD_SPLASH);
     m_pSplashDlg->ShowWindow(SW_SHOW);
-
 
 	//CWinThread* MyThread = AfxBeginThread(MyThreadFunction, this, THREAD_PRIORITY_NORMAL, 0, 0, NULL);
 	//DWORD exitcode2;
