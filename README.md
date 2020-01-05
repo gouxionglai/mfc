@@ -32,6 +32,6 @@
 
 ## 文件路径
 
-![img](F:\git\irms\images\目录结构.png)
+![img](./images/目录结构.png)
 
 目标文件就是irms.exe 执行过程中会调用一些bat。有的bat在MySQL目录下。
