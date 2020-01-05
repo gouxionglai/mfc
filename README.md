@@ -22,13 +22,13 @@
 
 ​	
 
-[bat]: bat.md
+[bat.md](bat.md)
 
 
 
 ## mfc
 
-[mfc]: mfc.md
+[mfc.md](./mfc.md)
 
 ## 文件路径
 
