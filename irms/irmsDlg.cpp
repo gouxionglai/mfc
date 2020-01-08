@@ -71,6 +71,63 @@ BEGIN_MESSAGE_MAP(CirmsDlg, CDialogEx)
 	ON_COMMAND(ID_32773, &CirmsDlg::OnExit)
 END_MESSAGE_MAP()
 
+
+//获取系统版本
+CString getOSName()
+{
+	CString osName = _T("");
+	int a = 0, b = 0, i = 0, j = 0;
+	_asm
+	{
+		pushad
+		mov ebx, fs: [0x18] ; get self pointer from TEB
+		mov eax, fs: [0x30] ; get pointer to PEB / database
+		mov ebx, [eax + 0A8h]; get OSMinorVersion
+		mov eax, [eax + 0A4h]; get OSMajorVersion
+		mov j, ebx
+		mov i, eax
+		popad
+	}
+
+	if ((i == 5) && (j == 0))
+	{
+		osName = _T("Windows2000");
+	}
+	else if ((i == 5) && (j == 1))
+	{
+		osName = _T("WindowsXP");
+	}
+	else if ((i == 5) && (j == 2))
+	{
+		osName = _T("Windows2003");
+	}
+	else if ((i == 6) && (j == 0))
+	{
+		osName = _T("WindowsVista");
+	}
+	else if ((i == 6) && (j == 1))
+	{
+		osName = _T("Windows7");
+	}
+	else if ((i == 6) && (j == 2))
+	{
+		osName = _T("Windows8");
+	}
+	else if ((i == 6) && (j == 3))
+	{
+		osName = _T("Windows8.1");
+	}
+	else if ((i == 10) && (j == 0))
+	{
+		osName = _T("Windows10");
+	}
+	else
+	{
+		osName = _T("当前系统低于Windows2000，或者高于Windows10，或者未知系统版本");
+	}
+	return osName;
+}
+
 //执行命令，返回执行结果
 CString ExecuteCmd2(CString cmdline)
 {
@@ -189,6 +246,7 @@ BOOL CirmsDlg::OnInitDialog()
 	ShellExecute(NULL, NULL, _T("calljar.bat"), NULL, NULL, SW_HIDE);
 	//temp = ExecuteCmd(str3, NULL);
 	//4.检测jar是否启动成功
+	// 正常来说 应该先检查服务是否已启动，如果启动了则不用执行第3步启动jar包
 	((CirmsApp*)AfxGetApp())->pSplashThread->log("检查服务是否已启动......");
 	//ShellExecute(NULL, NULL, _T("checkserver.bat"), NULL, NULL, SW_HIDE);
 	CString str4 = _T("cmd /c netstat -ano | findstr 0.0.0.0:9009");
@@ -198,7 +256,7 @@ BOOL CirmsDlg::OnInitDialog()
 	int i = 0;
 
 	//启动30秒如果还是没启动 则抛错
-	while (i<10)
+	while (i<30)
 	{
 		res = ExecuteCmd2(str4);
 		DWORD le0 = res.GetLength();
@@ -206,8 +264,21 @@ BOOL CirmsDlg::OnInitDialog()
 		{
 			break;
 		}
+		//动态更新效果
+		if (i%3==0) 
+		{
+			((CirmsApp*)AfxGetApp())->pSplashThread->log("启动服务中......");
+		}
+		else if (i%3==1) 
+		{
+			((CirmsApp*)AfxGetApp())->pSplashThread->log("启动服务中....");
+		}
+		else 
+		{
+			((CirmsApp*)AfxGetApp())->pSplashThread->log("启动服务中.....");
+		}
 		//1s请求一次
-		Sleep(3000);
+		Sleep(1000);
 		i++;
 	}
 
@@ -227,7 +298,7 @@ BOOL CirmsDlg::OnInitDialog()
 	NotifyIcon.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 	Shell_NotifyIcon(NIM_ADD, &NotifyIcon);   //添加系统托盘
 
-	if (i >=10) 
+	if (i >=30) 
 	{
 		AfxMessageBox(_T("启动程序失败，请退出程序重试..."));
 		((CirmsApp*)AfxGetApp())->pSplashThread->log("启动程序失败，请退出程序重试......");
@@ -410,8 +481,15 @@ CString getPid(CString p)
 void CirmsDlg::OnStart()
 {
 	// TODO: 在此添加命令处理程序代码
+	//获取系统版本信息
+	CString osName = getOSName();
+	//拼接参数
+	CString param = "--user-data-dir=tmp --no-sandbox --disk-cache-dir=cache --disable-translate --start-maximized --user-agent=irms_";
+	CString param2 = " --app=http://127.0.0.1:9009/api/index.html";
+	CString finalString = param + osName + param2;
 	//打开浏览器
-	ShellExecute(NULL, NULL, _T("chrome.exe"), _T("--app=http://localhost:9009/api"), _T("chrome49.0.2623.112"), SW_SHOWMAXIMIZED);
+	ShellExecute(NULL, NULL, _T("chrome.exe"), _T(finalString), _T("chrome49.0.2623.112"), SW_SHOWMAXIMIZED);
+	//ShellExecute(NULL, NULL, _T("chrome.exe"), _T("--app=http://localhost:9009/api"), _T("chrome49.0.2623.112"), SW_SHOWMAXIMIZED);
 }
 
 //关于
