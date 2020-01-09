@@ -12,6 +12,7 @@
 #define IDB_BITMAP1                     135
 #define IDC_BACKGROUND                  1000
 #define IDC_INFO                        1002
+#define IDC_STATIC_SHOW                 1005
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_32773                        32773
@@ -22,7 +23,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32774
-#define _APS_NEXT_CONTROL_VALUE         1005
+#define _APS_NEXT_CONTROL_VALUE         1006
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -43,4 +43,8 @@ public:
 	//根据进程id关闭进程
 	BOOL KillProcessById(DWORD pID);
 	BOOL DestroyWindow();
+	void OnCancel();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	POINT Old;
+	void resize();
 };
